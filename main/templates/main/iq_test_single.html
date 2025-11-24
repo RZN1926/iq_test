@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IQ Тест</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  {% load static %}
+  {% load question_extras %}
+  <style>
+    body {
+      background-color: #1a202c;
+      color: #e2e8f0;
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .question-container {
+      max-width: 500px;
+      width: 100%;
+      background-color: #2d3748;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .progress {
+      font-size: 1.2rem;
+      color: #a0aec0;
+      margin-bottom: 1rem;
+    }
+    .question-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .image-question {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1.5rem;
+      border-radius: 0.25rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .option-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .option-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border: 2px solid #4a5568;
+      border-radius: 0.25rem;
+      transition: border-color 0.3s ease;
+    }
+    .option-image:hover {
+      border-color: #63b3ed;
+    }
+    input[type="radio"] {
+      margin-bottom: 0.5rem;
+    }
+    .option-item {
+      cursor: pointer;
+      border: 2px solid #4a5568;
+      border-radius: 0.25rem;
+      overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+    .option-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .option-item:hover {
+      border-color: #63b3ed;
+    }
+  </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.option-item');
+            options.forEach(option => {
+            option.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                const form = document.querySelector('form');
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'answer';
+                input.value = value;
+                form.appendChild(input);
+                form.submit();
+            });
+            });
+        });
+    </script>
+
+</head>
+<body>
+  <div class="question-container">
+    <h2 class="text-3xl font-bold text-white mb-4">IQ Тест</h2>
+    <p class="progress">Вопрос {{ progress }}</p>
+
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+      <p class="question-text">{{ question.text }}</p>
+
+      {% if question.image %}
+        <img src="{{ question.image.url }}" alt="Вопрос" class="image-question">
+      {% endif %}
+
+      <div class="options-grid">
+        {% for i in "123456" %}
+          {% with opt=question|get_option:i %}
+            {% if opt %}
+              <div class="option-item" data-value="{{ i }}">
+                <img src="{{ opt.url }}" alt="Вариант {{ i }}">
+              </div>
+            {% endif %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+
+      <input type="hidden" name="question_id" value="{{ question.id }}">
+    </form>
+  </div>
+</body>
+</html>

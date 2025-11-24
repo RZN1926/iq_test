@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Рейтинг</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  {% load static %}
+  <style>
+    body {
+      background-color: #1a202c;
+      color: #e2e8f0;
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .leaderboard-container {
+      max-width: 700px;
+      width: 100%;
+      background-color: #2d3748;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    .leaderboard-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #63b3ed;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .leaderboard-list {
+      list-style-position: inside;
+      padding-left: 0;
+    }
+    .leaderboard-item {
+      font-size: 1.1rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid #4a5568;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .leaderboard-item:last-child {
+      border-bottom: none;
+    }
+    .leaderboard-item span {
+      color: #a0aec0;
+    }
+    .leaderboard-link {
+      display: block;
+      margin-top: 2rem;
+      text-align: center;
+      color: #a0aec0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .leaderboard-link:hover {
+      color: #63b3ed;
+    }
+    .button {
+      padding: 1rem 2rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      margin: 0.5rem;
+      cursor: pointer;
+    }
+
+    .button-primary {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+    }
+    .button-primary:hover {
+      background-color: #2563eb;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="leaderboard-container">
+    <h2 class="leaderboard-title">Топ пользователей</h2>
+    <ol class="leaderboard-list">
+      {% for u in users %}
+        <li class="leaderboard-item" style="justify-content: center; text-align: center;">
+          {{ u.username }} — Best: {{ u.best_score }} | Avg: {{ u.avg_score|floatformat:2 }}
+        </li>
+      {% endfor %}
+    </ol>
+    <div style="display: flex; justify-content: center;">
+      <button class="button button-primary" onclick="window.location.href='/'">Главная</button>
+      <button class="button button-primary" onclick="window.location.href='/profile'">Профиль</button>
+    </div>
+  </div>
+</body>
+</html>

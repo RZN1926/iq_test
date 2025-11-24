@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Страница не найдена | IQ Тест</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('{% static "man.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.65);
+            padding: 3rem 4rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            max-width: 90%;
+            backdrop-filter: blur(5px);
+        }
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.1em;
+        }
+        .error-message {
+            font-size: 2.5rem;
+            margin: 1rem 0;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+        }
+        .description {
+            font-size: 1.3rem;
+            margin: 1.5rem 0;
+            opacity: 0.9;
+        }
+        .button {
+            padding: 1rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            margin: 0.75rem;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .button-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-message">Ой! Страница пропала в чёрной дыре</h2>
+        <p class="description">
+            Возможно, ты ввёл неправильный адрес или страница была удалена.<br>
+            Но твой IQ всё равно выше среднего
+        </p>
+
+        <div class="mt-8">
+            <a href="{% url 'home' %}" class="button button-primary">Вернуться на главную</a>
+            
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="button button-primary">Мой профиль</a>
+                <a href="{% url 'iq_test' %}" class="button button-primary">Пройти тест</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="button button-primary">Войти</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

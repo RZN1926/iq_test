@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход - IQ Тест</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  {% load static %}
+  <style>
+    body {
+      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+      color: #e2e8f0;
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-container {
+      max-width: 420px;
+      width: 100%;
+      background-color: #2d3748;
+      padding: 2.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .auth-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #63b3ed;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.95rem;
+      color: #cbd5e0;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #4a5568 !important;
+      border: 1px solid #718096;
+      border-radius: 0.5rem;
+      color: #e2e8f0 !important;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #63b3ed;
+      box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.2);
+    }
+    .submit-button {
+      width: 100%;
+      padding: 0.875rem;
+      background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+      color: white;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .submit-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+    }
+    .auth-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #a0aec0;
+    }
+    .auth-link a {
+      color: #63b3ed;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    .auth-link a:hover {
+      color: #4299e1;
+    }
+    .errorlist {
+      color: #fc8181;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      list-style: none;
+      padding: 0;
+    }
+    .messages {
+      margin-bottom: 1rem;
+    }
+    .alert {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .alert-error {
+      background-color: rgba(252, 129, 129, 0.2);
+      border: 1px solid #fc8181;
+      color: #fc8181;
+    }
+    .alert-success {
+      background-color: rgba(104, 211, 145, 0.2);
+      border: 1px solid #68d391;
+      color: #68d391;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <h2 class="auth-title">Вход</h2>
+    
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      
+      {% if form.non_field_errors %}
+        <ul class="errorlist">
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <div class="form-group">
+        <label class="form-label" for="id_username">Имя пользователя</label>
+        <input type="text" name="username" id="id_username" class="form-input" 
+               style="color: #e2e8f0 !important; background-color: #4a5568 !important;"
+               required autofocus>
+        {% if form.username.errors %}
+          <ul class="errorlist">
+            {% for error in form.username.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="id_password">Пароль</label>
+        <input type="password" name="password" id="id_password" class="form-input"
+               style="color: #e2e8f0 !important; background-color: #4a5568 !important;"
+               required>
+        {% if form.password.errors %}
+          <ul class="errorlist">
+            {% for error in form.password.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="submit-button">Войти</button>
+    </form>
+
+    <div class="auth-link">
+      Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
+    </div>
+  </div>
+
+  <script>
+    // Принудительно устанавливаем цвет текста после загрузки
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.style.color = '#e2e8f0';
+        input.style.backgroundColor = '#4a5568';
+        
+        // При вводе текста
+        input.addEventListener('input', function() {
+          this.style.color = '#e2e8f0';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
